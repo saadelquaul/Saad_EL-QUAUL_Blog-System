@@ -1,5 +1,12 @@
 <?php
 include '../includes/Classes/User.php';
+include '../includes/session.php';
+
+if(isLoggedIn())
+{
+    header('Location: home.php');
+    exit;
+}
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']))
 {
     $username = $_POST['username'];
@@ -8,20 +15,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']))
     $ConfirmPassowrd = $_POST['confirm_password'];
      $errors = [] ;
 
-    //validate Email 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format";
     }
-    //validate Password
+
     if (strlen($password) < 8) {
         $errors[] = "Password must be at least 8.";
         
     }
-    //check if passwords match
+    
     if ($password!= $ConfirmPassowrd) {
         $errors[] = "Passwords do not match";
     }
-    //if there are no errors, insert user into the database
+
     if(empty($errors)) {
         if(User::create($username, $email, $password, $errors)){
 

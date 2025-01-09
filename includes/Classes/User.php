@@ -4,10 +4,11 @@ require_once '../includes/Database.php';
 
 class User {
 
-    private $id;
-    private $username;
-    private $email;
-    private $password;
+    private int $id;
+    private string $username;
+    private string $email;
+    private string $password;
+    private string $role;
     private $errors = array();
 
     public function __construct(?array $data = NULL) {
@@ -16,6 +17,7 @@ class User {
             $this->username = isset($data['username']) ? $data['username'] : null;
             $this->email = isset($data['email']) ? $data['email'] : null;
             $this->password = isset($data['password']) ? $data['password'] : null;
+            $this->role = isset($data['role']) ? $data['role'] : null;
         } else {
             $this->id = null;
             $this->username = null;
@@ -29,7 +31,6 @@ class User {
     public static function create($username, $email, $password,array $errors) {
         $db = Database::getInstance();
 
-        // Check if email exists
         if (self::getUserByEmail($email)) {
             $errors[] = 'Email already exists';
             return false;
@@ -89,6 +90,9 @@ class User {
         }
     }
 
+    public function CheckPassword($password) {
+        return password_verify($password, $this->password);
+    }
     public function update($data) {
         // Check if username or email has changed and check for uniqueness
         if (isset($data['username']) && $data['username'] != $this->username) {
@@ -149,6 +153,13 @@ class User {
         } else {
             return false;
         }
+    }
+
+    public function fillSession() {
+        $_SESSION['user_id'] = $this->id;
+        $_SESSION['username'] = $this->username;
+        $_SESSION['email'] = $this->email;
+        $_SESSION['role'] = $this->role;
     }
 
 }

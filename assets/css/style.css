@@ -113,7 +113,6 @@ footer {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     & .profile-info {
-        display: none;
         position: absolute;
         top: 100%;
         right:8%;
@@ -125,6 +124,10 @@ footer {
 
         }
     }
+}
+
+.none {
+    display: none;
 }
 .add-article {
     padding: 10px;
@@ -244,5 +247,12 @@ footer {
         background-color: #FFA933;
         color: white;
         transition: background-color 0.3s;
+    }
+}
+a {
+    color: #4267B2;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
     }
 }

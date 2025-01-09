@@ -1,4 +1,36 @@
 <?php
+include '../includes/session.php';
+include '../includes/Classes/User.php';
+
+$errors = [];
+if(isLoggedIn())
+{
+    header('Location: home.php');
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $user = User::getUserByEmail($email);
+    
+    if ($user) {
+        if ($user->CheckPassword($password)) {
+            $user->fillSession();
+
+            if($_SESSION['role'] == 'admin') {
+                header('Location: dashboard.php');
+            }else {
+                header('Location: home.php');
+            }
+            exit;
+        } else {
+            $errors[] = 'Invalid email or password.';
+        }
+    } else {
+        $errors[] = 'Invalid email or password.';
+        }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +58,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="register.php" method="POST">
+        <form action="login.php" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Enter your Email" required>

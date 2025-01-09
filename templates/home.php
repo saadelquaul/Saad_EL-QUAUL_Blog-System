@@ -1,4 +1,9 @@
 <?php
+include '../includes/session.php';
+if(!isset($_SESSION['user_id'])){
+    header('location:login.php');
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -100,6 +105,7 @@
         </div>
     </div>
     <?php include '../includes/footer.php' ?>
+    <script src="../assets/js/script.js"></script>
 </body>
 
 </html>
